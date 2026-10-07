@@ -1,453 +1,520 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#08111f">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<title>QR-Shield v1.1 | Scan Before You Trust</title>
 
-  <title>QR-Shield | Scan Before You Trust</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;font-family:Arial,sans-serif;color:#fff;
+ background:radial-gradient(circle at top,#173d68 0%,#08111f 48%,#030811 100%);
+}
+.container{width:min(94%,760px);margin:auto;padding:30px 0 60px}
+.header{text-align:center;margin-bottom:25px}
+.shield{
+ width:88px;height:98px;margin:auto;display:flex;align-items:center;
+ justify-content:center;font-size:43px;
+ background:linear-gradient(145deg,#19d3ff,#246cff);
+ clip-path:polygon(50% 0,92% 17%,84% 70%,50% 100%,16% 70%,8% 17%);
+}
+h1{margin:14px 0 4px;font-size:36px}
+.tagline{color:#9fc8e8;margin:0}
+.version{color:#5fe1ff;font-size:12px;margin-top:7px}
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+.card{
+ background:rgba(12,27,47,.94);border:1px solid #24496c;
+ border-radius:20px;padding:22px;margin-top:18px;
+ box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+h2{margin-top:0;font-size:20px}
+.small{color:#9eb7cb;font-size:14px;line-height:1.6}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background:
-        radial-gradient(circle at top, #173d68 0%, #08111f 48%, #030811 100%);
-      color: #ffffff;
-    }
+input{
+ width:100%;padding:16px;border-radius:12px;border:1px solid #386083;
+ background:#071522;color:#fff;font-size:16px;outline:none;
+}
+input:focus{border-color:#21c8ff}
 
-    .container {
-      width: min(94%, 760px);
-      margin: auto;
-      padding: 32px 0 60px;
-    }
+button,.uploadLabel{
+ width:100%;display:block;margin-top:12px;padding:15px;border:0;
+ border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;
+ text-align:center;
+}
+.primary{
+ background:linear-gradient(90deg,#13c8ff,#3478ff);color:#fff;
+}
+.secondary{
+ background:#152c42;color:#d8efff;border:1px solid #315773;
+}
+.stop{background:#44212a;color:#ffbdc2;border:1px solid #843c49}
+#photoInput{display:none}
 
-    .header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+#reader{
+ display:none;margin-top:16px;overflow:hidden;border-radius:15px;
+ background:#02070d;padding:10px;
+}
+#reader video{width:100%!important;border-radius:12px}
 
-    .shield {
-      width: 85px;
-      height: 95px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      background: linear-gradient(145deg, #19d3ff, #246cff);
-      clip-path: polygon(50% 0, 92% 17%, 84% 70%, 50% 100%, 16% 70%, 8% 17%);
-      box-shadow: 0 0 30px rgba(25,211,255,.4);
-    }
+.scannerStatus{
+ display:none;margin-top:12px;padding:12px;border-radius:10px;
+ background:#0a1a29;color:#9edfff;border:1px solid #234d70;
+}
 
-    h1 {
-      margin: 14px 0 4px;
-      font-size: 36px;
-      letter-spacing: 1px;
-    }
+.result{display:none}
+.status{
+ padding:18px;border-radius:14px;text-align:center;
+ font-size:23px;font-weight:bold;margin-bottom:18px;
+}
+.safe{
+ background:rgba(30,200,120,.15);border:1px solid #2bd68f;color:#52e7a8;
+}
+.warning{
+ background:rgba(255,180,0,.13);border:1px solid #ffb400;color:#ffc642;
+}
+.danger{
+ background:rgba(255,60,70,.14);border:1px solid #ff4b55;color:#ff6972;
+}
+.score{font-size:42px;font-weight:bold;text-align:center}
+.urlbox{
+ word-break:break-all;background:#071522;padding:13px;border-radius:10px;
+ margin:12px 0;color:#b9dcf5;
+}
+.domainbox{
+ background:#0b1c2c;padding:12px;border-radius:10px;
+ margin:10px 0;color:#72ddff;word-break:break-all;
+}
+ul{padding-left:20px;line-height:1.7}
 
-    .tagline {
-      color: #9fc8e8;
-      margin: 0;
-    }
-
-    .card {
-      background: rgba(12, 27, 47, .92);
-      border: 1px solid #24496c;
-      border-radius: 20px;
-      padding: 22px;
-      margin-top: 18px;
-      box-shadow: 0 15px 40px rgba(0,0,0,.35);
-    }
-
-    h2 {
-      margin-top: 0;
-      font-size: 20px;
-    }
-
-    input {
-      width: 100%;
-      padding: 16px;
-      border-radius: 12px;
-      border: 1px solid #386083;
-      background: #071522;
-      color: white;
-      font-size: 16px;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #21c8ff;
-      box-shadow: 0 0 0 3px rgba(33,200,255,.12);
-    }
-
-    button {
-      width: 100%;
-      margin-top: 12px;
-      padding: 15px;
-      border: 0;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .analyze {
-      background: linear-gradient(90deg, #13c8ff, #3478ff);
-      color: white;
-    }
-
-    .scan {
-      background: #152c42;
-      color: #d8efff;
-      border: 1px solid #315773;
-    }
-
-    .result {
-      display: none;
-    }
-
-    .status {
-      padding: 18px;
-      border-radius: 14px;
-      text-align: center;
-      font-size: 25px;
-      font-weight: bold;
-      margin-bottom: 18px;
-    }
-
-    .safe {
-      background: rgba(30,200,120,.15);
-      border: 1px solid #2bd68f;
-      color: #52e7a8;
-    }
-
-    .warning {
-      background: rgba(255,180,0,.13);
-      border: 1px solid #ffb400;
-      color: #ffc642;
-    }
-
-    .danger {
-      background: rgba(255,60,70,.14);
-      border: 1px solid #ff4b55;
-      color: #ff6972;
-    }
-
-    .score {
-      font-size: 42px;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .small {
-      color: #9eb7cb;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .urlbox {
-      word-break: break-all;
-      background: #071522;
-      padding: 12px;
-      border-radius: 10px;
-      margin: 12px 0;
-      color: #b9dcf5;
-    }
-
-    ul {
-      padding-left: 20px;
-      line-height: 1.7;
-    }
-
-    .footer {
-      text-align: center;
-      color: #718ba1;
-      font-size: 12px;
-      margin-top: 25px;
-    }
-
-    .warning-banner {
-      padding: 12px;
-      background: rgba(255,181,0,.1);
-      border-left: 4px solid #ffb400;
-      border-radius: 8px;
-      color: #ffd66d;
-      font-size: 13px;
-      margin-top: 15px;
-    }
-  </style>
+.notice{
+ padding:12px;background:rgba(255,181,0,.1);
+ border-left:4px solid #ffb400;border-radius:8px;
+ color:#ffd66d;font-size:13px;margin-top:15px;
+}
+.privacy{
+ padding:12px;background:rgba(25,211,255,.08);
+ border-left:4px solid #19d3ff;border-radius:8px;
+ color:#aeeeff;font-size:13px;margin-top:12px;
+}
+.footer{text-align:center;color:#718ba1;font-size:12px;margin-top:25px}
+</style>
 </head>
 
 <body>
-
 <div class="container">
 
-  <div class="header">
-    <div class="shield">🛡</div>
-    <h1>QR-SHIELD</h1>
-    <p class="tagline">Scan Before You Trust</p>
-  </div>
+<div class="header">
+ <div class="shield">🛡️</div>
+ <h1>QR-SHIELD</h1>
+ <p class="tagline">Scan Before You Trust</p>
+ <div class="version">v1.1 • Defensive QR Analysis</div>
+</div>
 
-  <div class="card">
-    <h2>🔎 Inspect a QR Destination</h2>
+<div class="card">
+ <h2>📷 Scan a QR Code</h2>
 
-    <p class="small">
-      Paste the URL contained in a QR code. QR-Shield checks it for
-      common phishing and URL-obfuscation indicators before you visit it.
-    </p>
+ <p class="small">
+ QR-Shield reads the QR content first. It does not automatically visit
+ the scanned destination.
+ </p>
 
-    <input
-      id="urlInput"
-      type="text"
-      placeholder="https://example.com"
-      autocomplete="off"
-      spellcheck="false"
-    >
+ <button class="primary" onclick="startCamera()">📷 Scan with Camera</button>
 
-    <button class="analyze" onclick="analyzeURL()">
-      Analyze Destination
-    </button>
+ <label class="uploadLabel secondary" for="photoInput">
+   🖼️ Choose QR Photo / Screenshot
+ </label>
+ <input id="photoInput" type="file" accept="image/*">
 
-    <button class="scan" onclick="cameraInfo()">
-      📷 QR Camera Scanner — Coming Next
-    </button>
+ <button id="stopButton" class="stop" style="display:none" onclick="stopCamera()">
+   Stop Camera
+ </button>
 
-    <div class="warning-banner">
-      QR-Shield does not automatically open analyzed links.
-      Always verify unexpected QR codes independently.
-    </div>
-  </div>
+ <div id="reader"></div>
+ <div id="scannerStatus" class="scannerStatus"></div>
 
-  <div id="resultCard" class="card result">
+ <div class="privacy">
+   🔒 QR contents are analyzed in your browser. QR-Shield will not
+   automatically navigate to a scanned URL.
+ </div>
+</div>
 
-    <div id="statusBox" class="status"></div>
+<div class="card">
+ <h2>🔎 Manual URL Inspection</h2>
 
-    <div class="score">
-      <span id="score">0</span>/100
-    </div>
+ <p class="small">
+ You can also paste a destination manually.
+ </p>
 
-    <p class="small" style="text-align:center;">
-      Risk Score
-    </p>
+ <input id="urlInput" type="text"
+ placeholder="https://example.com"
+ autocomplete="off" spellcheck="false">
 
-    <h2>Destination</h2>
-    <div id="displayURL" class="urlbox"></div>
+ <button class="primary" onclick="analyzeFromInput()">
+   Analyze Destination
+ </button>
 
-    <h2>Analysis</h2>
-    <ul id="findings"></ul>
+ <div class="notice">
+   ⚠️ A low risk score does not prove that a website is safe.
+   Verify unexpected QR codes through a trusted source.
+ </div>
+</div>
 
-  </div>
+<div id="resultCard" class="card result">
 
-  <div class="card">
-    <h2>🛡 What QR-Shield Checks</h2>
+ <div id="statusBox" class="status"></div>
 
-    <ul class="small">
-      <li>Non-HTTPS destinations</li>
-      <li>IP-address based URLs</li>
-      <li>URL shortener services</li>
-      <li>Suspicious login and verification keywords</li>
-      <li>Unusually long URLs</li>
-      <li>Excessive subdomains</li>
-      <li>Punycode / look-alike domain indicators</li>
-      <li>Suspicious @ symbol URL manipulation</li>
-    </ul>
-  </div>
+ <div class="score"><span id="score">0</span>/100</div>
+ <p class="small" style="text-align:center">Observed URL Risk Score</p>
 
-  <div class="footer">
-    QR-Shield v1 • Defensive Cybersecurity Awareness Project
-    <br>
-    Local analysis only — a low score does not guarantee a website is safe.
-  </div>
+ <h2>🌐 Domain</h2>
+ <div id="domain" class="domainbox"></div>
+
+ <h2>🔗 Extracted Destination</h2>
+ <div id="displayURL" class="urlbox"></div>
+
+ <h2>🧪 Findings</h2>
+ <ul id="findings"></ul>
 
 </div>
 
+<div class="card">
+ <h2>🛡️ What QR-Shield Checks</h2>
+ <ul class="small">
+  <li>Non-HTTPS destinations</li>
+  <li>IP-address destinations</li>
+  <li>URL-shortening services</li>
+  <li>Suspicious login / verification wording</li>
+  <li>Unusually long URLs</li>
+  <li>Excessive subdomains</li>
+  <li>Punycode / look-alike domain indicators</li>
+  <li>@-symbol URL manipulation</li>
+  <li>Non-web QR content</li>
+ </ul>
+</div>
+
+<div class="footer">
+ QR-Shield v1.1 • Defensive Cybersecurity Awareness Project
+ <br>
+ Scan → Inspect → Verify → Decide
+</div>
+
+</div>
+
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
 <script>
+let qrScanner = null;
+let scanLocked = false;
 
-function analyzeURL() {
+const statusEl = document.getElementById("scannerStatus");
 
-  const input = document.getElementById("urlInput").value.trim();
-  const findings = [];
-  let risk = 0;
-
-  if (!input) {
-    alert("Enter a URL first.");
-    return;
-  }
-
-  let url;
-
-  try {
-    url = new URL(input);
-  } catch {
-    showInvalid(input);
-    return;
-  }
-
-  const hostname = url.hostname.toLowerCase();
-  const full = input.toLowerCase();
-
-  if (url.protocol !== "https:") {
-    risk += 20;
-    findings.push("⚠ Destination does not use HTTPS.");
-  } else {
-    findings.push("✓ HTTPS connection detected.");
-  }
-
-  const ipPattern =
-    /^(?:\d{1,3}\.){3}\d{1,3}$/;
-
-  if (ipPattern.test(hostname)) {
-    risk += 25;
-    findings.push("⚠ Destination uses an IP address instead of a normal domain.");
-  }
-
-  const shorteners = [
-    "bit.ly",
-    "tinyurl.com",
-    "t.co",
-    "goo.gl",
-    "is.gd",
-    "ow.ly",
-    "buff.ly",
-    "cutt.ly"
-  ];
-
-  if (shorteners.includes(hostname)) {
-    risk += 20;
-    findings.push("⚠ URL shortening service hides the final destination.");
-  }
-
-  const suspiciousWords = [
-    "login",
-    "verify",
-    "verification",
-    "password",
-    "account",
-    "secure",
-    "update",
-    "bank",
-    "wallet",
-    "urgent",
-    "signin"
-  ];
-
-  let wordHits = 0;
-
-  suspiciousWords.forEach(word => {
-    if (full.includes(word)) {
-      wordHits++;
-    }
-  });
-
-  if (wordHits >= 2) {
-    risk += 20;
-    findings.push("⚠ Multiple phishing-related keywords detected.");
-  } else if (wordHits === 1) {
-    risk += 8;
-    findings.push("⚠ A potentially sensitive keyword appears in the URL.");
-  }
-
-  if (input.length > 120) {
-    risk += 15;
-    findings.push("⚠ Unusually long URL.");
-  }
-
-  const subdomains = hostname.split(".");
-
-  if (subdomains.length > 4) {
-    risk += 15;
-    findings.push("⚠ Excessive subdomain levels detected.");
-  }
-
-  if (hostname.includes("xn--")) {
-    risk += 30;
-    findings.push("⚠ Punycode domain detected. Check for look-alike characters.");
-  }
-
-  if (url.username || url.password || input.includes("@")) {
-    risk += 25;
-    findings.push("⚠ @ / credential-style URL manipulation detected.");
-  }
-
-  if (findings.length === 1 && url.protocol === "https:") {
-    findings.push("✓ No obvious high-risk URL patterns detected.");
-  }
-
-  risk = Math.min(risk, 100);
-
-  displayResult(input, risk, findings);
+function scannerMessage(message){
+ statusEl.style.display="block";
+ statusEl.textContent=message;
 }
 
+async function startCamera(){
+ if(typeof Html5Qrcode==="undefined"){
+   scannerMessage("Scanner library could not be loaded. Check your internet connection.");
+   return;
+ }
 
-function displayResult(url, risk, findings) {
+ if(qrScanner){
+   await stopCamera();
+ }
 
-  const card = document.getElementById("resultCard");
-  const status = document.getElementById("statusBox");
+ scanLocked=false;
 
-  card.style.display = "block";
+ document.getElementById("reader").style.display="block";
+ document.getElementById("stopButton").style.display="block";
 
-  document.getElementById("score").textContent = risk;
-  document.getElementById("displayURL").textContent = url;
+ scannerMessage("Requesting camera access…");
 
-  const list = document.getElementById("findings");
-  list.innerHTML = "";
+ qrScanner=new Html5Qrcode("reader");
 
-  findings.forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = item;
-    list.appendChild(li);
-  });
+ try{
+   await qrScanner.start(
+     {facingMode:"environment"},
+     {
+       fps:10,
+       qrbox:{width:250,height:250},
+       aspectRatio:1.0
+     },
+     onScanSuccess,
+     function(){}
+   );
 
-  status.className = "status";
-
-  if (risk <= 20) {
-    status.textContent = "LOW OBSERVED RISK";
-    status.classList.add("safe");
-  }
-  else if (risk <= 50) {
-    status.textContent = "SUSPICIOUS — VERIFY FIRST";
-    status.classList.add("warning");
-  }
-  else {
-    status.textContent = "HIGH RISK — DO NOT TRUST";
-    status.classList.add("danger");
-  }
-
-  card.scrollIntoView({
-    behavior: "smooth"
-  });
+   scannerMessage("Camera active — point it at a QR code.");
+ }catch(error){
+   scannerMessage(
+     "Camera could not start. Allow camera permission in Safari/iPhone settings, then try again."
+   );
+   document.getElementById("stopButton").style.display="none";
+ }
 }
 
+async function stopCamera(){
+ if(qrScanner){
+   try{
+     if(qrScanner.isScanning){
+       await qrScanner.stop();
+     }
+     qrScanner.clear();
+   }catch(e){}
+   qrScanner=null;
+ }
 
-function showInvalid(input) {
-
-  document.getElementById("resultCard").style.display = "block";
-
-  const status = document.getElementById("statusBox");
-
-  status.className = "status danger";
-  status.textContent = "INVALID OR MALFORMED URL";
-
-  document.getElementById("score").textContent = "100";
-  document.getElementById("displayURL").textContent = input;
-
-  document.getElementById("findings").innerHTML =
-    "<li>The supplied text could not be interpreted as a valid URL.</li>";
+ document.getElementById("reader").style.display="none";
+ document.getElementById("stopButton").style.display="none";
 }
 
+async function onScanSuccess(decodedText){
+ if(scanLocked) return;
 
-function cameraInfo() {
-  alert(
-    "Camera QR scanning will be added in the next QR-Shield version."
-  );
+ scanLocked=true;
+ scannerMessage("QR detected. Analyzing without opening the destination…");
+
+ await stopCamera();
+ processQRContent(decodedText);
 }
 
+document.getElementById("photoInput").addEventListener("change",async function(event){
+ const file=event.target.files[0];
+ if(!file) return;
+
+ if(typeof Html5Qrcode==="undefined"){
+   scannerMessage("Scanner library could not be loaded.");
+   return;
+ }
+
+ await stopCamera();
+
+ scannerMessage("Reading QR code from image…");
+
+ const imageScanner=new Html5Qrcode("reader");
+
+ try{
+   const decodedText=await imageScanner.scanFile(file,true);
+
+   try{ imageScanner.clear(); }catch(e){}
+
+   scannerMessage("QR detected in photo. Analyzing…");
+   processQRContent(decodedText);
+
+ }catch(error){
+   try{ imageScanner.clear(); }catch(e){}
+
+   scannerMessage(
+     "No readable QR code was found in that image. Try a clearer or tighter screenshot."
+   );
+ }
+
+ event.target.value="";
+});
+
+function processQRContent(content){
+ const value=(content || "").trim();
+
+ document.getElementById("urlInput").value=value;
+
+ if(/^https?:\/\//i.test(value)){
+   analyzeURL(value);
+ }else{
+   displayNonWebQR(value);
+ }
+}
+
+function analyzeFromInput(){
+ const input=document.getElementById("urlInput").value.trim();
+
+ if(!input){
+   alert("Enter a URL first.");
+   return;
+ }
+
+ analyzeURL(input);
+}
+
+function analyzeURL(input){
+ const findings=[];
+ let risk=0;
+ let url;
+
+ try{
+   url=new URL(input);
+ }catch{
+   showInvalid(input);
+   return;
+ }
+
+ if(url.protocol!=="http:" && url.protocol!=="https:"){
+   displayNonWebQR(input);
+   return;
+ }
+
+ const hostname=url.hostname.toLowerCase();
+ const full=input.toLowerCase();
+
+ if(url.protocol!=="https:"){
+   risk+=20;
+   findings.push("⚠ Destination does not use HTTPS.");
+ }else{
+   findings.push("✓ HTTPS is used.");
+ }
+
+ const ipv4=/^(?:\d{1,3}\.){3}\d{1,3}$/;
+
+ if(ipv4.test(hostname) || hostname.startsWith("[") || hostname.endsWith("]")){
+   risk+=25;
+   findings.push("⚠ Destination uses an IP address rather than a normal domain.");
+ }
+
+ const shorteners=[
+   "bit.ly","tinyurl.com","t.co","goo.gl",
+   "is.gd","ow.ly","buff.ly","cutt.ly","rb.gy"
+ ];
+
+ if(shorteners.includes(hostname)){
+   risk+=20;
+   findings.push("⚠ URL-shortening service may conceal the final destination.");
+ }
+
+ const suspiciousWords=[
+   "login","verify","verification","password",
+   "account","secure","update","wallet",
+   "urgent","signin","confirm","authentication"
+ ];
+
+ let wordHits=0;
+
+ suspiciousWords.forEach(word=>{
+   if(full.includes(word)) wordHits++;
+ });
+
+ if(wordHits>=2){
+   risk+=20;
+   findings.push("⚠ Multiple phishing-related keywords appear in the URL.");
+ }else if(wordHits===1){
+   risk+=8;
+   findings.push("⚠ A sensitive or phishing-associated keyword appears in the URL.");
+ }
+
+ if(input.length>120){
+   risk+=15;
+   findings.push("⚠ URL is unusually long.");
+ }
+
+ const hostnameParts=hostname.split(".");
+
+ if(hostnameParts.length>4){
+   risk+=15;
+   findings.push("⚠ Multiple subdomain levels detected.");
+ }
+
+ if(hostname.includes("xn--")){
+   risk+=30;
+   findings.push("⚠ Punycode detected. Carefully check for a look-alike domain.");
+ }
+
+ if(url.username || url.password || input.includes("@")){
+   risk+=25;
+   findings.push("⚠ Credential/@-symbol URL manipulation detected.");
+ }
+
+ if(hostname.includes("--")){
+   risk+=5;
+   findings.push("ℹ Domain contains repeated hyphens. Verify its spelling.");
+ }
+
+ if(findings.length===1 && url.protocol==="https:"){
+   findings.push("✓ No additional obvious URL-pattern warnings detected.");
+ }
+
+ risk=Math.min(risk,100);
+
+ displayResult(input,hostname,risk,findings);
+}
+
+function displayResult(url,hostname,risk,findings){
+ const card=document.getElementById("resultCard");
+ const status=document.getElementById("statusBox");
+
+ card.style.display="block";
+
+ document.getElementById("score").textContent=risk;
+ document.getElementById("domain").textContent=hostname;
+ document.getElementById("displayURL").textContent=url;
+
+ const list=document.getElementById("findings");
+ list.innerHTML="";
+
+ findings.forEach(item=>{
+   const li=document.createElement("li");
+   li.textContent=item;
+   list.appendChild(li);
+ });
+
+ status.className="status";
+
+ if(risk<=20){
+   status.textContent="LOW OBSERVED RISK — VERIFY";
+   status.classList.add("safe");
+ }else if(risk<=50){
+   status.textContent="SUSPICIOUS — VERIFY FIRST";
+   status.classList.add("warning");
+ }else{
+   status.textContent="HIGH RISK — DO NOT TRUST";
+   status.classList.add("danger");
+ }
+
+ card.scrollIntoView({behavior:"smooth"});
+}
+
+function displayNonWebQR(content){
+ const card=document.getElementById("resultCard");
+ const status=document.getElementById("statusBox");
+
+ card.style.display="block";
+ status.className="status warning";
+ status.textContent="NON-WEB QR CONTENT";
+
+ document.getElementById("score").textContent="—";
+ document.getElementById("domain").textContent="Not a web URL";
+ document.getElementById("displayURL").textContent=content || "(empty QR content)";
+
+ const list=document.getElementById("findings");
+ list.innerHTML="";
+
+ const li=document.createElement("li");
+ li.textContent="QR-Shield decoded the QR code, but its content is not an HTTP/HTTPS web address.";
+ list.appendChild(li);
+
+ card.scrollIntoView({behavior:"smooth"});
+}
+
+function showInvalid(input){
+ const card=document.getElementById("resultCard");
+ const status=document.getElementById("statusBox");
+
+ card.style.display="block";
+ status.className="status danger";
+ status.textContent="INVALID OR MALFORMED URL";
+
+ document.getElementById("score").textContent="100";
+ document.getElementById("domain").textContent="Unable to determine";
+ document.getElementById("displayURL").textContent=input;
+
+ const list=document.getElementById("findings");
+ list.innerHTML="";
+
+ const li=document.createElement("li");
+ li.textContent="The supplied text could not be interpreted as a valid web URL.";
+ list.appendChild(li);
+
+ card.scrollIntoView({behavior:"smooth"});
+}
 </script>
 
 </body>
