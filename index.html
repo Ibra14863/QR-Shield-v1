@@ -1,521 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07111f">
-<title>QR-Shield v1.1 | Scan Before You Trust</title>
-
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f"><meta name="referrer" content="no-referrer">
+<title>QR-Shield v1.2 | Scan Before You Trust</title>
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;min-height:100vh;font-family:Arial,sans-serif;color:#fff;
- background:radial-gradient(circle at top,#173d68 0%,#08111f 48%,#030811 100%);
-}
-.container{width:min(94%,760px);margin:auto;padding:30px 0 60px}
-.header{text-align:center;margin-bottom:25px}
-.shield{
- width:88px;height:98px;margin:auto;display:flex;align-items:center;
- justify-content:center;font-size:43px;
- background:linear-gradient(145deg,#19d3ff,#246cff);
- clip-path:polygon(50% 0,92% 17%,84% 70%,50% 100%,16% 70%,8% 17%);
-}
-h1{margin:14px 0 4px;font-size:36px}
-.tagline{color:#9fc8e8;margin:0}
-.version{color:#5fe1ff;font-size:12px;margin-top:7px}
-
-.card{
- background:rgba(12,27,47,.94);border:1px solid #24496c;
- border-radius:20px;padding:22px;margin-top:18px;
- box-shadow:0 15px 40px rgba(0,0,0,.35);
-}
-h2{margin-top:0;font-size:20px}
-.small{color:#9eb7cb;font-size:14px;line-height:1.6}
-
-input{
- width:100%;padding:16px;border-radius:12px;border:1px solid #386083;
- background:#071522;color:#fff;font-size:16px;outline:none;
-}
-input:focus{border-color:#21c8ff}
-
-button,.uploadLabel{
- width:100%;display:block;margin-top:12px;padding:15px;border:0;
- border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;
- text-align:center;
-}
-.primary{
- background:linear-gradient(90deg,#13c8ff,#3478ff);color:#fff;
-}
-.secondary{
- background:#152c42;color:#d8efff;border:1px solid #315773;
-}
-.stop{background:#44212a;color:#ffbdc2;border:1px solid #843c49}
-#photoInput{display:none}
-
-#reader{
- display:none;margin-top:16px;overflow:hidden;border-radius:15px;
- background:#02070d;padding:10px;
-}
-#reader video{width:100%!important;border-radius:12px}
-
-.scannerStatus{
- display:none;margin-top:12px;padding:12px;border-radius:10px;
- background:#0a1a29;color:#9edfff;border:1px solid #234d70;
-}
-
-.result{display:none}
-.status{
- padding:18px;border-radius:14px;text-align:center;
- font-size:23px;font-weight:bold;margin-bottom:18px;
-}
-.safe{
- background:rgba(30,200,120,.15);border:1px solid #2bd68f;color:#52e7a8;
-}
-.warning{
- background:rgba(255,180,0,.13);border:1px solid #ffb400;color:#ffc642;
-}
-.danger{
- background:rgba(255,60,70,.14);border:1px solid #ff4b55;color:#ff6972;
-}
-.score{font-size:42px;font-weight:bold;text-align:center}
-.urlbox{
- word-break:break-all;background:#071522;padding:13px;border-radius:10px;
- margin:12px 0;color:#b9dcf5;
-}
-.domainbox{
- background:#0b1c2c;padding:12px;border-radius:10px;
- margin:10px 0;color:#72ddff;word-break:break-all;
-}
-ul{padding-left:20px;line-height:1.7}
-
-.notice{
- padding:12px;background:rgba(255,181,0,.1);
- border-left:4px solid #ffb400;border-radius:8px;
- color:#ffd66d;font-size:13px;margin-top:15px;
-}
-.privacy{
- padding:12px;background:rgba(25,211,255,.08);
- border-left:4px solid #19d3ff;border-radius:8px;
- color:#aeeeff;font-size:13px;margin-top:12px;
-}
-.footer{text-align:center;color:#718ba1;font-size:12px;margin-top:25px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:#f3f8ff;background:radial-gradient(circle at top,#173d68,#08111f 50%,#030811)}main{width:min(94%,780px);margin:auto;padding:25px 0 55px}header{text-align:center;padding:15px 0}h1{font-size:clamp(30px,7vw,44px);margin:8px 0 0}.tag{color:#a5d9fa;margin:0}.version{color:#61dcff;font-size:13px}.shield{font-size:50px}section{background:#0c1b2fee;border:1px solid #284d6b;border-radius:18px;padding:20px;margin:18px 0;box-shadow:0 12px 28px #0005}h2{font-size:20px;margin:0 0 10px}p,.muted{color:#b7cddd}input[type=text]{width:100%;padding:14px;border-radius:10px;border:1px solid #52718b;background:#06121f;color:white;font-size:16px}button,.upload{display:block;width:100%;padding:14px;margin:11px 0;border:0;border-radius:11px;background:linear-gradient(90deg,#08bdeb,#397cff);color:#fff;font-size:16px;font-weight:700;text-align:center;cursor:pointer}.secondary,.upload{background:#18344c;border:1px solid #426c8c}.stop{background:#50232e;border:1px solid #8b4353}.upload input{display:none}#reader{display:none;background:#030c17;border-radius:12px;overflow:hidden;padding:8px;margin-top:12px}#reader video{max-width:100%}.notice{background:#173248;border-left:4px solid #27d6fa;border-radius:7px;padding:12px;color:#c6eaff;font-size:14px}.warn{border-left-color:#ffc34b;background:#40301c;color:#ffe4a6}.hidden{display:none}.status{border-radius:10px;padding:15px;text-align:center;font-weight:800;font-size:19px}.low{background:#164b3c;color:#a3ffce}.medium{background:#514017;color:#ffdf8d}.high{background:#581e2a;color:#ffb1bc}.neutral{background:#243b50;color:#d0e8fa}.score{text-align:center;font-size:38px;font-weight:800;margin:8px}.value{background:#06121f;padding:13px;border-radius:9px;overflow-wrap:anywhere;white-space:pre-wrap}ul{padding-left:22px}li{margin:6px 0}footer{text-align:center;color:#8ca6bb;font-size:13px}a{color:#9adfff}button:focus-visible,input:focus-visible,.upload:focus-within{outline:3px solid #fff;outline-offset:2px}
 </style>
 </head>
-
-<body>
-<div class="container">
-
-<div class="header">
- <div class="shield">🛡️</div>
- <h1>QR-SHIELD</h1>
- <p class="tagline">Scan Before You Trust</p>
- <div class="version">v1.1 • Defensive QR Analysis</div>
-</div>
-
-<div class="card">
- <h2>📷 Scan a QR Code</h2>
-
- <p class="small">
- QR-Shield reads the QR content first. It does not automatically visit
- the scanned destination.
- </p>
-
- <button class="primary" onclick="startCamera()">📷 Scan with Camera</button>
-
- <label class="uploadLabel secondary" for="photoInput">
-   🖼️ Choose QR Photo / Screenshot
- </label>
- <input id="photoInput" type="file" accept="image/*">
-
- <button id="stopButton" class="stop" style="display:none" onclick="stopCamera()">
-   Stop Camera
- </button>
-
- <div id="reader"></div>
- <div id="scannerStatus" class="scannerStatus"></div>
-
- <div class="privacy">
-   🔒 QR contents are analyzed in your browser. QR-Shield will not
-   automatically navigate to a scanned URL.
- </div>
-</div>
-
-<div class="card">
- <h2>🔎 Manual URL Inspection</h2>
-
- <p class="small">
- You can also paste a destination manually.
- </p>
-
- <input id="urlInput" type="text"
- placeholder="https://example.com"
- autocomplete="off" spellcheck="false">
-
- <button class="primary" onclick="analyzeFromInput()">
-   Analyze Destination
- </button>
-
- <div class="notice">
-   ⚠️ A low risk score does not prove that a website is safe.
-   Verify unexpected QR codes through a trusted source.
- </div>
-</div>
-
-<div id="resultCard" class="card result">
-
- <div id="statusBox" class="status"></div>
-
- <div class="score"><span id="score">0</span>/100</div>
- <p class="small" style="text-align:center">Observed URL Risk Score</p>
-
- <h2>🌐 Domain</h2>
- <div id="domain" class="domainbox"></div>
-
- <h2>🔗 Extracted Destination</h2>
- <div id="displayURL" class="urlbox"></div>
-
- <h2>🧪 Findings</h2>
- <ul id="findings"></ul>
-
-</div>
-
-<div class="card">
- <h2>🛡️ What QR-Shield Checks</h2>
- <ul class="small">
-  <li>Non-HTTPS destinations</li>
-  <li>IP-address destinations</li>
-  <li>URL-shortening services</li>
-  <li>Suspicious login / verification wording</li>
-  <li>Unusually long URLs</li>
-  <li>Excessive subdomains</li>
-  <li>Punycode / look-alike domain indicators</li>
-  <li>@-symbol URL manipulation</li>
-  <li>Non-web QR content</li>
- </ul>
-</div>
-
-<div class="footer">
- QR-Shield v1.1 • Defensive Cybersecurity Awareness Project
- <br>
- Scan → Inspect → Verify → Decide
-</div>
-
-</div>
-
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
+<body><main>
+<header><div class="shield" aria-hidden="true">🛡️</div><h1>QR-SHIELD</h1><p class="tag">Scan Before You Trust</p><div class="version">v1.2 • Defensive QR Awareness Prototype</div></header>
+<section><h2>📷 Scan a QR Code</h2><p>Decode a QR code without automatically visiting its destination.</p><button id="start">📷 Scan with Camera</button><label class="upload" for="photo">🖼️ Choose QR Photo / Screenshot<input id="photo" type="file" accept="image/*"></label><button id="stop" class="stop hidden">Stop Camera</button><div id="reader"></div><p id="scanStatus" class="notice" role="status" aria-live="polite">Ready. Camera access is requested only when you start scanning.</p></section>
+<section><h2>🔎 Manual URL Inspection</h2><p>Paste an HTTP or HTTPS destination for offline-pattern analysis.</p><input id="urlInput" type="text" placeholder="https://example.com" autocomplete="off" spellcheck="false" aria-label="URL to inspect"><button id="analyze">Analyze Destination</button><div class="notice warn">⚠️ A low score does not prove safety. This prototype cannot determine whether a website actually contains phishing content.</div></section>
+<section id="result" class="hidden" aria-live="polite"><div id="status" class="status neutral"></div><div id="score" class="score"></div><p class="muted" style="text-align:center">Heuristic indicators only — not a validated threat probability</p><h2>🌐 Hostname</h2><div id="domain" class="value"></div><h2 style="margin-top:15px">🔗 Decoded Destination</h2><div id="destination" class="value"></div><h2 style="margin-top:15px">🧪 Findings</h2><ul id="findings"></ul><button id="copy" class="secondary">Copy decoded content</button></section>
+<section><h2>🛡️ What QR-Shield Checks</h2><ul><li>Non-HTTPS URLs and IP-address destinations</li><li>Common shortening services and suspicious keywords</li><li>Long URLs, unusual subdomain depth and punycode</li><li>URL user-info tricks, encoded characters and nonstandard ports</li><li>Non-web QR content</li></ul><div class="notice">Privacy: URL-pattern analysis runs locally in this page. The QR decoding library is loaded from a third-party CDN, which can receive ordinary resource requests and associated network metadata. This prototype does not submit scanned URLs to a reputation API. Do not use sensitive QR codes before an approved privacy and security review.</div></section>
+<footer>QR-Shield v1.2 • Prototype for security awareness<br>Scan → Inspect → Verify → Decide</footer>
+</main>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
-let qrScanner = null;
-let scanLocked = false;
-
-const statusEl = document.getElementById("scannerStatus");
-
-function scannerMessage(message){
- statusEl.style.display="block";
- statusEl.textContent=message;
-}
-
+'use strict';
+const $=id=>document.getElementById(id);
+let scanner=null,locked=false,busy=false,cancelled=false;
+function message(t){$('scanStatus').textContent=t}
+function controls(value){busy=value;$('start').disabled=value;$('photo').disabled=value}
+async function cleanup(){if(scanner){const old=scanner;scanner=null;try{if(old.isScanning)await old.stop()}catch(e){}try{old.clear()}catch(e){}}$('reader').style.display='none';$('stop').classList.add('hidden')}
+async function stopCamera(){cancelled=true;if(busy){message('Stopping when the current camera request completes…');return}controls(true);try{await cleanup();message('Camera stopped.')}finally{controls(false)}}
 async function startCamera(){
- if(typeof Html5Qrcode==="undefined"){
-   scannerMessage("Scanner library could not be loaded. Check your internet connection.");
-   return;
- }
-
- if(qrScanner){
-   await stopCamera();
- }
-
- scanLocked=false;
-
- document.getElementById("reader").style.display="block";
- document.getElementById("stopButton").style.display="block";
-
- scannerMessage("Requesting camera access…");
-
- qrScanner=new Html5Qrcode("reader");
-
+ if(busy)return;
+ if(typeof Html5Qrcode==='undefined'){message('Scanner library unavailable. Check your connection or CDN access.');return}
+ controls(true);cancelled=false;
  try{
-   await qrScanner.start(
-     {facingMode:"environment"},
-     {
-       fps:10,
-       qrbox:{width:250,height:250},
-       aspectRatio:1.0
-     },
-     onScanSuccess,
-     function(){}
-   );
-
-   scannerMessage("Camera active — point it at a QR code.");
- }catch(error){
-   scannerMessage(
-     "Camera could not start. Allow camera permission in Safari/iPhone settings, then try again."
-   );
-   document.getElementById("stopButton").style.display="none";
- }
+  await cleanup();locked=false;$('reader').style.display='block';$('stop').classList.remove('hidden');message('Requesting camera permission…');
+  scanner=new Html5Qrcode('reader');
+  await scanner.start({facingMode:'environment'},{fps:10,qrbox:(w,h)=>{const s=Math.max(1,Math.min(250,w-32,h-32));return{width:s,height:s}}},async text=>{
+   if(locked||cancelled||busy)return;locked=true;controls(true);
+   try{await cleanup();message('QR decoded. Destination was not opened.');inspectContent(text)}finally{controls(false)}
+  },()=>{});
+  if(cancelled){await cleanup();message('Camera stopped.')}else message('Camera active — point at a QR code.');
+ }catch(e){await cleanup();message(cancelled?'Camera stopped.':'Camera unavailable. Check browser permission and HTTPS, or upload an image.')}
+ finally{controls(false)}
 }
-
-async function stopCamera(){
- if(qrScanner){
-   try{
-     if(qrScanner.isScanning){
-       await qrScanner.stop();
-     }
-     qrScanner.clear();
-   }catch(e){}
-   qrScanner=null;
- }
-
- document.getElementById("reader").style.display="none";
- document.getElementById("stopButton").style.display="none";
-}
-
-async function onScanSuccess(decodedText){
- if(scanLocked) return;
-
- scanLocked=true;
- scannerMessage("QR detected. Analyzing without opening the destination…");
-
- await stopCamera();
- processQRContent(decodedText);
-}
-
-document.getElementById("photoInput").addEventListener("change",async function(event){
- const file=event.target.files[0];
- if(!file) return;
-
- if(typeof Html5Qrcode==="undefined"){
-   scannerMessage("Scanner library could not be loaded.");
-   return;
- }
-
- await stopCamera();
-
- scannerMessage("Reading QR code from image…");
-
- const imageScanner=new Html5Qrcode("reader");
-
+$('start').addEventListener('click',startCamera);$('stop').addEventListener('click',stopCamera);
+$('photo').addEventListener('change',async e=>{
+ const file=e.target.files?.[0];if(!file||busy)return;controls(true);
  try{
-   const decodedText=await imageScanner.scanFile(file,true);
-
-   try{ imageScanner.clear(); }catch(e){}
-
-   scannerMessage("QR detected in photo. Analyzing…");
-   processQRContent(decodedText);
-
- }catch(error){
-   try{ imageScanner.clear(); }catch(e){}
-
-   scannerMessage(
-     "No readable QR code was found in that image. Try a clearer or tighter screenshot."
-   );
- }
-
- event.target.value="";
+  await cleanup();
+  if(typeof Html5Qrcode==='undefined'){message('Scanner library unavailable.');return}
+  if(!file.type.startsWith('image/')||file.size>10*1024*1024){message('Choose an image smaller than 10 MB.');return}
+  message('Reading QR image…');$('reader').style.display='block';
+  scanner=new Html5Qrcode('reader');
+  const decoded=await scanner.scanFile(file,true);message('QR decoded from image. Destination was not opened.');inspectContent(decoded);
+ }catch(err){message('Could not decode this image. Try a sharper, closely cropped QR photo.')}
+ finally{await cleanup();e.target.value='';controls(false)}
 });
-
-function processQRContent(content){
- const value=(content || "").trim();
-
- document.getElementById("urlInput").value=value;
-
- if(/^https?:\/\//i.test(value)){
-   analyzeURL(value);
- }else{
-   displayNonWebQR(value);
- }
-}
-
-function analyzeFromInput(){
- const input=document.getElementById("urlInput").value.trim();
-
- if(!input){
-   alert("Enter a URL first.");
-   return;
- }
-
- analyzeURL(input);
-}
-
-function analyzeURL(input){
- const findings=[];
- let risk=0;
- let url;
-
- try{
-   url=new URL(input);
- }catch{
-   showInvalid(input);
-   return;
- }
-
- if(url.protocol!=="http:" && url.protocol!=="https:"){
-   displayNonWebQR(input);
-   return;
- }
-
- const hostname=url.hostname.toLowerCase();
- const full=input.toLowerCase();
-
- if(url.protocol!=="https:"){
-   risk+=20;
-   findings.push("⚠ Destination does not use HTTPS.");
- }else{
-   findings.push("✓ HTTPS is used.");
- }
-
- const ipv4=/^(?:\d{1,3}\.){3}\d{1,3}$/;
-
- if(ipv4.test(hostname) || hostname.startsWith("[") || hostname.endsWith("]")){
-   risk+=25;
-   findings.push("⚠ Destination uses an IP address rather than a normal domain.");
- }
-
- const shorteners=[
-   "bit.ly","tinyurl.com","t.co","goo.gl",
-   "is.gd","ow.ly","buff.ly","cutt.ly","rb.gy"
- ];
-
- if(shorteners.includes(hostname)){
-   risk+=20;
-   findings.push("⚠ URL-shortening service may conceal the final destination.");
- }
-
- const suspiciousWords=[
-   "login","verify","verification","password",
-   "account","secure","update","wallet",
-   "urgent","signin","confirm","authentication"
- ];
-
- let wordHits=0;
-
- suspiciousWords.forEach(word=>{
-   if(full.includes(word)) wordHits++;
- });
-
- if(wordHits>=2){
-   risk+=20;
-   findings.push("⚠ Multiple phishing-related keywords appear in the URL.");
- }else if(wordHits===1){
-   risk+=8;
-   findings.push("⚠ A sensitive or phishing-associated keyword appears in the URL.");
- }
-
- if(input.length>120){
-   risk+=15;
-   findings.push("⚠ URL is unusually long.");
- }
-
- const hostnameParts=hostname.split(".");
-
- if(hostnameParts.length>4){
-   risk+=15;
-   findings.push("⚠ Multiple subdomain levels detected.");
- }
-
- if(hostname.includes("xn--")){
-   risk+=30;
-   findings.push("⚠ Punycode detected. Carefully check for a look-alike domain.");
- }
-
- if(url.username || url.password || input.includes("@")){
-   risk+=25;
-   findings.push("⚠ Credential/@-symbol URL manipulation detected.");
- }
-
- if(hostname.includes("--")){
-   risk+=5;
-   findings.push("ℹ Domain contains repeated hyphens. Verify its spelling.");
- }
-
- if(findings.length===1 && url.protocol==="https:"){
-   findings.push("✓ No additional obvious URL-pattern warnings detected.");
- }
-
- risk=Math.min(risk,100);
-
- displayResult(input,hostname,risk,findings);
-}
-
-function displayResult(url,hostname,risk,findings){
- const card=document.getElementById("resultCard");
- const status=document.getElementById("statusBox");
-
- card.style.display="block";
-
- document.getElementById("score").textContent=risk;
- document.getElementById("domain").textContent=hostname;
- document.getElementById("displayURL").textContent=url;
-
- const list=document.getElementById("findings");
- list.innerHTML="";
-
- findings.forEach(item=>{
-   const li=document.createElement("li");
-   li.textContent=item;
-   list.appendChild(li);
- });
-
- status.className="status";
-
- if(risk<=20){
-   status.textContent="LOW OBSERVED RISK — VERIFY";
-   status.classList.add("safe");
- }else if(risk<=50){
-   status.textContent="SUSPICIOUS — VERIFY FIRST";
-   status.classList.add("warning");
- }else{
-   status.textContent="HIGH RISK — DO NOT TRUST";
-   status.classList.add("danger");
- }
-
- card.scrollIntoView({behavior:"smooth"});
-}
-
-function displayNonWebQR(content){
- const card=document.getElementById("resultCard");
- const status=document.getElementById("statusBox");
-
- card.style.display="block";
- status.className="status warning";
- status.textContent="NON-WEB QR CONTENT";
-
- document.getElementById("score").textContent="—";
- document.getElementById("domain").textContent="Not a web URL";
- document.getElementById("displayURL").textContent=content || "(empty QR content)";
-
- const list=document.getElementById("findings");
- list.innerHTML="";
-
- const li=document.createElement("li");
- li.textContent="QR-Shield decoded the QR code, but its content is not an HTTP/HTTPS web address.";
- list.appendChild(li);
-
- card.scrollIntoView({behavior:"smooth"});
-}
-
-function showInvalid(input){
- const card=document.getElementById("resultCard");
- const status=document.getElementById("statusBox");
-
- card.style.display="block";
- status.className="status danger";
- status.textContent="INVALID OR MALFORMED URL";
-
- document.getElementById("score").textContent="100";
- document.getElementById("domain").textContent="Unable to determine";
- document.getElementById("displayURL").textContent=input;
-
- const list=document.getElementById("findings");
- list.innerHTML="";
-
- const li=document.createElement("li");
- li.textContent="The supplied text could not be interpreted as a valid web URL.";
- list.appendChild(li);
-
- card.scrollIntoView({behavior:"smooth"});
-}
-</script>
-
-</body>
-</html>
+$('urlInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('analyze').click()});
+$('analyze').addEventListener('click',()=>{const v=$('urlInput').value.trim();if(!v){message('Enter a destination first.');return}inspectContent(v)});
+$('copy').addEventListener('click',async()=>{const t=$('destination').textContent;try{await navigator.clipboard.writeText(t);message('Decoded content copied.')}catch(e){message('Clipboard unavailable. Select and copy the decoded content manually.')}});
+function show(kind,title,score,host,dest,items){$('result').classList.remove('hidden');$('status').className='status '+kind;$('status').textContent=title;$('score').textContent=score===null?'Not scored':score+'/100';$('domain').textContent=host;$('destination').textContent=dest;const list=$('findings');list.replaceChildren();for(const item of items){const li=document.createElement('li');li.textContent=item;list.appendChild(li)}$('result').scrollIntoView({behavior:'smooth',block:'start'})}
+function inspectContent(raw){const input=String(raw??'').trim();$('urlInput').value=input;if(!input){show('neutral','EMPTY QR CONTENT',null,'Not applicable','(empty)',['No destination was supplied.']);return}if(!/^https?:\/\//i.test(input)){show('neutral','NON-WEB OR UNSUPPORTED CONTENT',null,'Not an HTTP(S) URL',input,['Content is not an explicit HTTP or HTTPS URL. QR codes can contain text, Wi-Fi credentials, contact information or other schemes.','No web destination was opened.']);return}let u;try{u=new URL(input)}catch(e){show('medium','INVALID WEB URL',null,'Unable to parse',input,['The supplied text is not a valid HTTP(S) URL.']);return}if(!['http:','https:'].includes(u.protocol)||!u.hostname){show('medium','UNSUPPORTED DESTINATION',null,'Unable to parse',input,['Only HTTP and HTTPS destinations are inspected.']);return}const host=u.hostname.toLowerCase(),full=input.toLowerCase(),items=[];let risk=0;const add=(points,msg)=>{risk+=points;items.push(msg)};if(u.protocol==='http:')add(20,'⚠ Unencrypted HTTP destination.');else items.push('✓ HTTPS scheme detected; this alone does not establish trust.');if(/^\d{1,3}(?:\.\d{1,3}){3}$/.test(host)||host.startsWith('['))add(25,'⚠ IP-address destination instead of a conventional hostname.');if(['bit.ly','tinyurl.com','t.co','goo.gl','is.gd','ow.ly','buff.ly','cutt.ly','rb.gy'].includes(host))add(20,'⚠ Known URL shortener; final redirect is not resolved.');const words=['login','verify','verification','password','account','secure','update','wallet','urgent','signin','confirm','authentication'];const hits=words.filter(w=>full.includes(w)).length;if(hits>=2)add(20,'⚠ Multiple sensitive or phishing-associated keywords.');else if(hits===1)add(8,'ℹ Sensitive keyword present; this can also occur on legitimate sites.');if(input.length>120)add(15,'⚠ Unusually long URL.');if(host.split('.').length>4)add(15,'⚠ Many hostname labels; inspect the registered domain carefully.');if(host.includes('xn--'))add(30,'⚠ Punycode hostname; review for look-alike characters.');if(u.username||u.password)add(25,'⚠ User-info section before @ can mislead readers about the actual hostname.');if(host.includes('--'))add(5,'ℹ Repeated hyphens in hostname.');if(u.port)add(10,'ℹ Non-default port explicitly specified.');if(/%(?:2f|5c|40|00)/i.test(input))add(10,'⚠ Encoded separators or control characters detected.');if(/\\/.test(input))add(10,'⚠ Backslash present; URL parsers may interpret it unexpectedly.');if(items.length===1)items.push('✓ No other listed URL-pattern indicators detected. This is not a safety guarantee.');risk=Math.min(100,risk);show(risk>50?'high':risk>20?'medium':'low',risk>50?'HIGH OBSERVED PATTERN RISK — VERIFY OUT OF BAND':risk>20?'SUSPICIOUS PATTERNS — VERIFY FIRST':'LOW OBSERVED PATTERN RISK — STILL VERIFY',risk,host,input,items)}
+</script></body></html>
